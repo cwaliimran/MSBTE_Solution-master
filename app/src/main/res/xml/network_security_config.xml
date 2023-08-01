@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+
+
+
+<!--    <domain-config>-->
+<!--        &lt;!&ndash; Razorpay Payment Gateway &ndash;&gt;-->
+<!--        <domain includeSubdomains="true">api.razorpay.com</domain>-->
+<!--        <trust-anchors>-->
+<!--            &lt;!&ndash; Add any specific trust anchors for Razorpay if required &ndash;&gt;-->
+<!--        </trust-anchors>-->
+<!--    </domain-config>-->
+
+<!--    <domain-config>-->
+<!--        &lt;!&ndash; Firebase Features &ndash;&gt;-->
+<!--        <domain includeSubdomains="true">firebase.googleapis.com</domain>-->
+<!--        <trust-anchors>-->
+<!--            &lt;!&ndash; Add any specific trust anchors for Firebase if required &ndash;&gt;-->
+<!--        </trust-anchors>-->
+<!--    </domain-config>-->
+
+
+
+    <!-- Add more domain-config blocks for additional domains or services -->
+
+</network-security-config>

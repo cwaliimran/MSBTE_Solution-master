@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
+    compileSdkVersion 33
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.msbte.modelanswerpaper"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 38
+        versionName "4.7"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    buildFeatures {
+        dataBinding true
+    }
+    namespace 'com.msbte.modelanswerpaper'
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+    implementation 'com.google.firebase:firebase-analytics:21.2.2'
+    implementation 'com.google.firebase:firebase-storage:20.2.0'
+    implementation 'com.google.firebase:firebase-firestore:24.6.0'
+    implementation 'com.google.firebase:firebase-database:20.2.1'
+    implementation 'com.firebaseui:firebase-ui-database:6.3.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+
+    implementation 'eu.dkaratzas:android-inapp-update:1.0.5' // Update
+    implementation 'com.google.android.play:core:1.10.3' // IN app review
+
+    // Recommended for SDK to be able to get Android Advertising ID
+    implementation 'com.google.android.gms:play-services-basement:18.2.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+//    implementation 'com.startapp:inapp-sdk:4.10.5'
+
+    // For apps targeting Android 12, add WorkManager dependency.
+    constraints {
+        implementation('androidx.work:work-runtime:2.7.0') {
+            because '''androidx.work:work-runtime:2.1.0 pulled from play-services-ads
+                   has a bug using PendingIntent without FLAG_IMMUTABLE or
+                   FLAG_MUTABLE and will fail in apps targeting S+.'''
+        }
+    }
+
+//    Mediation
+//    implementation 'com.google.ads.mediation:facebook:6.12.0.0'
+    implementation 'com.google.ads.mediation:applovin:11.9.0.0'
+    implementation 'com.unity3d.ads:unity-ads:3.7.5'
+
+//// Add UnityAds Network
+//    implementation 'com.ironsource.adapters:unityadsadapter:4.3.14'
+//    implementation 'com.unity3d.ads:unity-ads:3.7.5'
+//    // Add AdMob and Ad Manager Network
+//    implementation 'com.google.android.gms:play-services-ads:21.3.0'
+//    implementation 'com.ironsource.adapters:admobadapter:4.3.24'
+////    // Add Facebook Network
+////    implementation 'com.ironsource.adapters:facebookadapter:4.3.34'
+////    implementation 'com.facebook.android:audience-network-sdk:6.8.0'
+
+    def lottieVersion = "3.4.0" //lotti files
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0' // slider
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0' // image load
+
+//    implementation 'com.github.barteksc:AndroidPdfViewerV1:1.6.0'
+//    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'  // this we have to  use
+
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+
+//    //InApp Open Ads Admob
+//    def lifecycle_version = "2.2.0"
+//    def lifecycle_version1 = "2.3.1"
+//    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version1"
+//    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version1"
+
+    implementation 'com.github.jrvansuita:MaterialAbout:+' // About me page
+    implementation 'com.github.medyo:android-about-page:1.2.5'
+
+    implementation 'com.razorpay:checkout:1.6.30'
+//    implementation 'com.razorpay:razorpay-android:1.5.2'
+
+
+}

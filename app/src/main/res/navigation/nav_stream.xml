@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_stream"
+    app:startDestination="@id/streamFragment">
+
+    <fragment
+        android:id="@+id/streamFragment"
+        android:name="com.msbte.modelanswerpaper.fragment_ui.StreamFragment"
+        android:label="fragment_stream"
+        tools:layout="@layout/fragment_stream" >
+        <action
+            android:id="@+id/action_streamFragment_to_semesterFragment"
+            app:destination="@id/semesterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/semesterFragment"
+        android:name="com.msbte.modelanswerpaper.fragment_ui.SemesterFragment"
+        android:label="fragment_semester"
+        tools:layout="@layout/fragment_semester" >
+        <action
+            android:id="@+id/action_semesterFragment_to_subjectFragment"
+            app:destination="@id/subjectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectFragment"
+        android:name="com.msbte.modelanswerpaper.fragment_ui.SubjectFragment"
+        android:label="fragment_subject"
+        tools:layout="@layout/fragment_subject" >
+        <action
+            android:id="@+id/action_subjectFragment_to_questionPapersFragment"
+            app:destination="@id/questionPapersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionPapersFragment"
+        android:name="com.msbte.modelanswerpaper.fragment_ui.QuestionPapersFragment"
+        android:label="fragment_question_papers"
+        tools:layout="@layout/fragment_question_papers" >
+        <action
+            android:id="@+id/action_questionPapersFragment_to_questionPaperViewerFragment"
+            app:destination="@id/questionPaperViewerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionPaperViewerFragment"
+        android:name="com.msbte.modelanswerpaper.fragment_ui.QuestionPaperViewerFragment"
+        android:label="fragment_question_paper_viewer"
+        tools:layout="@layout/fragment_question_paper_viewer" />
+</navigation>

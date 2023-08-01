@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MSBTE Solution</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="notification_error_ssl_cert_invalid">"SSL Error"</string>
+
+    <!--&lt;!&ndash;     Real Ad Units &ndash;&gt;-->
+<!--    <string name="banner_id">ca-app-pub-2011693013052685/4271313770</string>-->
+<!--    <string name="reward_id">ca-app-pub-2011693013052685/2717918327</string>-->
+<!--    <string name="intrestial_id">ca-app-pub-2011693013052685/4079742086</string>-->
+<!--    <string name="appid">ca-app-pub-2011693013052685~9992278853</string>-->
+
+    <!--        Testing-->
+        <string name="banner_id">ca-app-pub-3940256099942544/6300978111</string>
+        <string name="reward_id">ca-app-pub-3940256099942544/5224354917</string>
+        <string name="intrestial_id">ca-app-pub-3940256099942544/1033173712</string>
+        <string name="openads">ca-app-pub-3940256099942544/3419835294</string>
+        <string name="appid">ca-app-pub-3940256099942544~3347511713</string>
+
+</resources>

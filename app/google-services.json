@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1031800024451",
+    "project_id": "msbte-solution",
+    "storage_bucket": "msbte-solution.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031800024451:android:e77a6ad112f2edd7a6dab6",
+        "android_client_info": {
+          "package_name": "com.msbte.modelanswerpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031800024451-s2t3ivc6hsc5v60fq38g6j8r73oirk2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArGiLu_dQKtxvjn2WEI4623C84e_9jfgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031800024451-s2t3ivc6hsc5v60fq38g6j8r73oirk2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

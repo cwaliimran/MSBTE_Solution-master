@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/telegrambtn"
+        android:icon="@drawable/ic_telegram_black_24dp"
+        android:title="Join Telegram"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/dev1"
+        android:icon="@drawable/dev"
+        android:title="Share"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/sharebtn"
+        android:icon="@drawable/share_btn"
+        android:title="Share"
+        app:showAsAction="ifRoom" />
+
+
+</menu>
