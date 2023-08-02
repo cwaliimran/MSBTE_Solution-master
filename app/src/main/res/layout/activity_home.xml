@@ -57,15 +57,18 @@
                     android:orientation="vertical">
 
 
-                    <GridView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/gridView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:columnWidth="100dp"
                         android:gravity="center"
                         android:numColumns="2"
                         android:padding="5dp"
-                        android:stretchMode="columnWidth" />
+                        android:stretchMode="columnWidth"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/mobile" />
 
                 </LinearLayout>
             </ScrollView>
