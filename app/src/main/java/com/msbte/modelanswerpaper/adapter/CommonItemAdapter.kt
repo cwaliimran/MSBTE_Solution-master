@@ -13,10 +13,11 @@ import com.msbte.modelanswerpaper.databinding.ItemCommonUiBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
 import com.msbte.modelanswerpaper.utils.OnClickInteface
 
-class CommonItemAdapter :
+class CommonItemAdapter(
+    var commonItemModelList: MutableList<CommonItemModel?> = mutableListOf(),
+    var homeInterface: OnClickInteface
+) :
     RecyclerView.Adapter<CommonItemAdapter.HomeViewHolder>() {
-    private var commonItemModelList: MutableList<CommonItemModel?> = mutableListOf()
-     var homeInterface: OnClickInteface
     private var mLastClickTime: Long = 0
     fun checkListIsEmpty(): Boolean {
         return commonItemModelList.size == 0
@@ -32,7 +33,6 @@ class CommonItemAdapter :
         RecyclerView.ViewHolder(
             itemCommonUiBinding.root
         )
-
 
 
     override fun getItemId(position: Int): Long {

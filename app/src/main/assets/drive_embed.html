@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive Embed</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #iframeContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="iframeContainer">
+    <iframe id="myIframe" src="https://drive.google.com/embeddedfolderview?id=1t_lRCTROxXT8XdplqgIf64c31f1vqXoD#grid" frameborder="0"></iframe>
+</div>
+<script>
+        function resizeIframe() {
+            var iframe = document.getElementById("myIframe");
+            var container = document.getElementById("iframeContainer");
+            iframe.style.height = container.clientHeight + "px";
+        }
+
+        window.onresize = resizeIframe;
+        resizeIframe();
+    </script>
+</body>
+</html>

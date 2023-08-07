@@ -21,7 +21,6 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.google.android.gms.ads.AdRequest
@@ -31,7 +30,6 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
 import com.msbte.modelanswerpaper.CheckNetwork
-import com.msbte.modelanswerpaper.R
 import com.msbte.modelanswerpaper.databinding.FragmentQuestionPaperViewerBinding
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -43,10 +41,10 @@ import java.net.URLEncoder
  */
 class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError") constructor() :
     Fragment() {
-    // TODO: Rename and change types of parameters
     private lateinit var mParam1: String
     private lateinit var mParam2: String
     private lateinit var binding: FragmentQuestionPaperViewerBinding
+
     private lateinit var url: String
     lateinit var manager: ReviewManager
     lateinit var reviewInfo: ReviewInfo
@@ -59,14 +57,13 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
 
         // review
         // In onCreateView or onViewCreated method of your Fragment
         manager = ReviewManagerFactory.create(requireActivity())
-        val request = manager!!.requestReviewFlow()
+        val request = manager.requestReviewFlow()
         Log.d(ContentValues.TAG, "called")
         request.addOnCompleteListener { task: Task<ReviewInfo?> ->
             if (task.isSuccessful) {
@@ -74,8 +71,8 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
                 reviewInfo = task.result
                 Log.d(ContentValues.TAG, "called2")
                 // Launch review flow
-                val flow = manager!!.launchReviewFlow(
-                    requireActivity(), reviewInfo!!
+                val flow = manager.launchReviewFlow(
+                    requireActivity(), reviewInfo
                 )
                 flow.addOnCompleteListener { reviewFlowTask: Task<Void?> ->
                     if (reviewFlowTask.isSuccessful) {
@@ -88,15 +85,9 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
         }
         // review end
 
-        // Inflate the layout for this fragment
-        if (binding == null) binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_question_paper_viewer,
-            container,
-            false
-        )
-        binding!!.lifecycleOwner = viewLifecycleOwner
-        return binding!!.root
+
+        binding = FragmentQuestionPaperViewerBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,19 +97,16 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
         setupAdapter()
         setupAds()
         loadData()
-        binding!!.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun setupAds() {
         MobileAds.initialize(requireContext()) { }
         val adRequest = AdRequest.Builder().build()
-        if (binding!!.adView2Main != null) {
-            binding!!.adView2Main.loadAd(adRequest)
-        }
+        binding.adView2Main.loadAd(adRequest)
     }
 
     private fun loadData() {
-        binding!!.tvTitle.text = mParam1
+        binding.tvTitle.text = mParam1
         if (TextUtils.isEmpty(mParam2)) {
             return
         }
@@ -127,28 +115,28 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
         } catch (e: UnsupportedEncodingException) {
             e.printStackTrace()
         }
-        binding!!.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
         netcheck()
-        binding!!.webView.settings.javaScriptEnabled = true
-        binding!!.webView.settings.domStorageEnabled = true
-        binding!!.webView.settings.loadsImagesAutomatically = true
-        binding!!.webView.settings.builtInZoomControls = true
-        binding!!.webView.settings.useWideViewPort = true
-        binding!!.webView.settings.allowFileAccessFromFileURLs = true
-        binding!!.webView.settings.allowUniversalAccessFromFileURLs = true
-        binding!!.webView.clearSslPreferences()
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.settings.domStorageEnabled = true
+        binding.webView.settings.loadsImagesAutomatically = true
+        binding.webView.settings.builtInZoomControls = true
+        binding.webView.settings.useWideViewPort = true
+        binding.webView.settings.allowFileAccessFromFileURLs = true
+        binding.webView.settings.allowUniversalAccessFromFileURLs = true
+        binding.webView.clearSslPreferences()
         //Those other methods I tried out of despair just in case
-        binding!!.webView.clearFormData()
-        binding!!.webView.clearCache(true)
-        binding!!.webView.clearHistory()
-        binding!!.webView.clearMatches()
-        binding!!.webView.webViewClient = SSLTolerentWebViewClient()
-        binding!!.webView.overScrollMode = WebView.OVER_SCROLL_NEVER
+        binding.webView.clearFormData()
+        binding.webView.clearCache(true)
+        binding.webView.clearHistory()
+        binding.webView.clearMatches()
+        binding.webView.webViewClient = SSLTolerentWebViewClient()
+        binding.webView.overScrollMode = WebView.OVER_SCROLL_NEVER
 
         // Add SSL related configurations
-        binding!!.webView.settings.mixedContentMode =
+        binding.webView.settings.mixedContentMode =
             WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE // Allow loading mixed content
-        binding!!.webView.settings.blockNetworkLoads = false // Allow network loads
+        binding.webView.settings.blockNetworkLoads = false // Allow network loads
 
 
 //        binding.webView.setWebViewClient(new MyclientWebView());
@@ -163,31 +151,27 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
 //        binding.webView.getSettings().setAllowFileAccessFromFileURLs(true);
 //        binding.webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
 //        binding.webView.getSettings().setDomStorageEnabled(true);
-        binding!!.webView.webChromeClient = object : WebChromeClient() {
+        binding.webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                binding!!.progressBar.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
                 if (newProgress >= 75) {
-                    binding!!.progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
             }
         }
-        binding!!.webView.webViewClient = object : WebViewClient() {
+        binding.webView.webViewClient = object : WebViewClient() {
             override fun onReceivedError(
-                view: WebView,
-                request: WebResourceRequest,
-                error: WebResourceError
+                view: WebView, request: WebResourceRequest, error: WebResourceError
             ) {
                 super.onReceivedError(view, request, error)
-                if (error != null) {
-                    Log.d("TAG", "onReceivedError: $error")
-                }
+                Log.d("TAG", "onReceivedError: $error")
             }
 
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-                Log.d("TAG", "onPageStarted: ")
             }
+
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -200,10 +184,15 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
 //                }
             }
 
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                view.loadUrl(url)
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                binding.webView.loadUrl(url)
                 return true
-            } //            @Override
+            }
+
+        //            @Override
             //            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             //                // Check the error code.
             //                int errorCode = error.getPrimaryError();
@@ -229,15 +218,15 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
             //
             //            }
         }
-        binding!!.webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$url")
+        binding.webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$url")
     }
 
     private fun setupAdapter() {
-        binding!!.imgBack.setOnClickListener { findNavController(binding!!.root).popBackStack() }
+        binding.imgBack.setOnClickListener { findNavController(binding.root).popBackStack() }
         if (TextUtils.isEmpty(mParam1)) {
             return
         }
-        binding!!.tvTitle.text = mParam1
+        binding.tvTitle.text = mParam1
         if (TextUtils.isEmpty(mParam2)) {
             return
         }
@@ -246,17 +235,18 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
     private fun netcheck() {
         if (!CheckNetwork.isInternetAvailable(activity)) //returns true if internet available
         {
-            binding!!.webView.loadUrl("file:///android_asset/error.html")
+            binding.webView.loadUrl("file:///android_asset/error.html")
         }
     }
 
     private fun backPressListner() {
-        requireActivity().onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController(binding!!.root).popBackStack()
-                }
-            })
+        requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        findNavController(binding.root).popBackStack()
+                    }
+                })
     }
 
     private inner class SSLTolerentWebViewClient : WebViewClient() {
@@ -276,14 +266,12 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
             alertDialog.setTitle("SSL Certificate Error")
             alertDialog.setMessage(message)
             alertDialog.setButton(
-                DialogInterface.BUTTON_POSITIVE,
-                "OK"
+                DialogInterface.BUTTON_POSITIVE, "OK"
             ) { dialog, which -> // Ignore SSL certificate errors
                 handler.proceed()
             }
             alertDialog.setButton(
-                DialogInterface.BUTTON_NEGATIVE,
-                "Cancel"
+                DialogInterface.BUTTON_NEGATIVE, "Cancel"
             ) { dialog, which -> handler.cancel() }
             alertDialog.show()
         }

@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.DataSnapshot
@@ -19,6 +20,7 @@ import com.msbte.modelanswerpaper.R
 import com.msbte.modelanswerpaper.adapter.CommonItemAdapter
 import com.msbte.modelanswerpaper.databinding.FragmentStreamBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
+import com.msbte.modelanswerpaper.utils.OnClickInteface
 
 /**
  * A simple [Fragment] subclass.
@@ -29,7 +31,9 @@ class StreamFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private lateinit var mParam1: String
     private lateinit var mParam2: String
+
     private lateinit var binding: FragmentStreamBinding
+
     private lateinit var commonItemAdapter: CommonItemAdapter
     private lateinit var options: FirebaseRecyclerOptions<CommonItemModel>
     private lateinit var mDatabase: DatabaseReference
@@ -44,11 +48,10 @@ class StreamFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_stream, container, false)
-        binding!!.lifecycleOwner = viewLifecycleOwner
-        return binding!!.root
+    ): View
+    {
+        binding = FragmentStreamBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,16 +67,16 @@ class StreamFragment : Fragment() {
     }
 
     private fun loadData() {
-        if (commonItemAdapter != null && !commonItemAdapter!!.checkListIsEmpty()) {
+        if (!commonItemAdapter.checkListIsEmpty()) {
             return
         }
-        binding!!.progressBar.visibility = View.VISIBLE
-        binding!!.tvText.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvText.visibility = View.GONE
         mDatabase = FirebaseDatabase.getInstance().reference
-        mDatabase!!.child("stream_data").child("stream")
+        mDatabase.child("stream_data").child("stream")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot != null && snapshot.childrenCount != 0L) {
+                    if (snapshot.childrenCount != 0L) {
                         val list: MutableList<CommonItemModel?> = ArrayList()
                         for (postSnapshot in snapshot.children) {
                             val model = postSnapshot.getValue(
@@ -81,28 +84,37 @@ class StreamFragment : Fragment() {
                             )
                             list.add(model)
                         }
-                        commonItemAdapter!!.setData(list)
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.GONE
+                        commonItemAdapter.setData(list)
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.GONE
                     } else {
-                        commonItemAdapter!!.setData(ArrayList())
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.VISIBLE
+                        commonItemAdapter.setData(ArrayList())
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    commonItemAdapter!!.setData(ArrayList())
+                    commonItemAdapter.setData(ArrayList())
                 }
             })
     }
 
     private fun setupAdapter() {
-        binding!!.imgBack.setOnClickListener { //                showAlertDialog("Exit", "Are you sure, want to exist from app?", 2);
+        binding.imgBack.setOnClickListener { //                showAlertDialog("Exit", "Are you sure, want to exist from app?", 2);
             requireActivity().finish()
         }
-        commonItemAdapter = CommonItemAdapter()
-        binding!!.rvCommon.adapter = commonItemAdapter
+        commonItemAdapter = CommonItemAdapter(mutableListOf(),object : OnClickInteface {
+            override fun onCLickItem(exerciseId: Int, title: CommonItemModel) {
+                val bundle = Bundle()
+                bundle.putString(ARG_PARAM1, title.name)
+                bundle.putString(ARG_PARAM2, title.sub_domain)
+                findNavController(binding.root)
+                    .navigate(R.id.action_streamFragment_to_semesterFragment, bundle)
+
+            }
+        })
+        binding.rvCommon.adapter = commonItemAdapter
     }
 
     private fun backPressListner() {

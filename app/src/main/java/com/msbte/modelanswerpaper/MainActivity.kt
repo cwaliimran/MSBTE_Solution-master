@@ -42,10 +42,6 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import java.io.File
-import java.security.KeyStore
-import java.security.KeyStoreException
-import java.security.NoSuchAlgorithmException
-import javax.net.ssl.TrustManagerFactory
 
 class MainActivity : AppCompatActivity() {
     lateinit var websiteURL: String
@@ -56,10 +52,11 @@ class MainActivity : AppCompatActivity() {
     private var backPressedTime: Long = 0
     private lateinit var backToast: Toast
     private lateinit var mAdView: AdView
-    private var mRewardedAd: RewardedAd ? = null
+    private var mRewardedAd: RewardedAd? = null
     lateinit var layout: CoordinatorLayout
     lateinit var manager: ReviewManager
     lateinit var reviewInfo: ReviewInfo
+
     @SuppressLint("WebViewClientOnReceivedSslError")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +68,8 @@ class MainActivity : AppCompatActivity() {
 //        IronSource.init(MainActivity.this, "1201f8ea5", IronSource.AD_UNIT.REWARDED_VIDEO);
         mAdView = findViewById(R.id.adView2_main)
         val adRequest = AdRequest.Builder().build()
-        if (mAdView != null) {
-            mAdView!!.loadAd(adRequest)
-        }
-        mAdView.setAdListener(object : AdListener() {
+        mAdView.loadAd(adRequest)
+        mAdView.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
             }
@@ -84,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 super.onAdFailedToLoad(adError)
                 //                mAdView.loadAd(adRequest);
             }
-        })
+        }
 
 //        setAds();
         websiteURL = intent.getStringExtra("url").toString()
@@ -131,29 +126,17 @@ class MainActivity : AppCompatActivity() {
                 WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE // Allow loading mixed content
             webview.getSettings().blockNetworkLoads = false // Allow network loads
 
+            webview.webViewClient = WebViewClient()
+            webview.loadUrl("file:///android_asset/drive_embed.html")
 
-//           webview.setWebViewClient(new Myclient2());
-            webview.loadUrl(websiteURL!!)
-            progressBar.setProgress(0)
+            //progressBar.setProgress(0)
             netcheck()
-            webview.setWebChromeClient(object : WebChromeClient() {
-                override fun onProgressChanged(view: WebView, newProgress: Int) {
-                    progressBar.setProgress(newProgress)
-                    if (newProgress == 100) progressBar.setVisibility(View.GONE) else progressBar.setVisibility(
-                        View.VISIBLE
-                    )
-                    netcheck()
-                    super.onProgressChanged(view, newProgress)
-                }
-            })
-            netcheck()
+
         }
 
         //Runtime External storage permission for saving download files
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED
-            ) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 Log.d("permission", "permission denied to WRITE_EXTERNAL_STORAGE - requesting it")
                 val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 requestPermissions(permissions, 1)
@@ -177,15 +160,12 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("Ok") { dialog, which ->
                         progressBar.setProgress(0)
                         progressBar.setVisibility(View.GONE)
-                    }
-                    .show()
+                    }.show()
             }
         } catch (e: Exception) {
             Toast.makeText(this@MainActivity, "Something Went Wrong!", Toast.LENGTH_LONG).show()
             Toast.makeText(
-                this@MainActivity,
-                "Please Check Your Internet Connection...",
-                Toast.LENGTH_LONG
+                this@MainActivity, "Please Check Your Internet Connection...", Toast.LENGTH_LONG
             ).show()
         }
         netcheck()
@@ -223,8 +203,11 @@ class MainActivity : AppCompatActivity() {
     //load ads
     private fun setAds() {
         val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(this, getString(R.string.reward_id),
-            adRequest, object : RewardedAdLoadCallback() {
+        RewardedAd.load(
+            this,
+            getString(R.string.reward_id),
+            adRequest,
+            object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     // Handle the error.
                     mRewardedAd = null
@@ -269,9 +252,7 @@ class MainActivity : AppCompatActivity() {
             progressBar!!.visibility = View.GONE
             Log.d(ContentValues.TAG, "The rewarded ad wasn't ready yet.I'm Calling Again")
             Toast.makeText(
-                this,
-                "No Ads available right now. Try after some time",
-                Toast.LENGTH_LONG
+                this, "No Ads available right now. Try after some time", Toast.LENGTH_LONG
             ).show()
         }
 
@@ -362,27 +343,30 @@ class MainActivity : AppCompatActivity() {
             alertDialog.setTitle("SSL Certificate Error")
             alertDialog.setMessage(message)
             alertDialog.setButton(
-                DialogInterface.BUTTON_POSITIVE,
-                "OK"
+                DialogInterface.BUTTON_POSITIVE, "OK"
             ) { dialog, which -> // Ignore SSL certificate errors
                 handler.proceed()
             }
             alertDialog.setButton(
-                DialogInterface.BUTTON_NEGATIVE,
-                "Cancel"
+                DialogInterface.BUTTON_NEGATIVE, "Cancel"
             ) { dialog, which -> handler.cancel() }
             alertDialog.show()
         }
 
-        override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            Log.d("TAG", "onPageStarted: ")
         }
 
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            view.loadUrl(url)
+
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+        ): Boolean {
+            webview.loadUrl(websiteURL)
             return true
         }
+
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
@@ -466,8 +450,7 @@ class MainActivity : AppCompatActivity() {
         webview = findViewById(R.id.webView)
         webview.setWebViewClient(object : WebViewClient() {
             override fun onReceivedError(
-                view: WebView, request: WebResourceRequest,
-                error: WebResourceError
+                view: WebView, request: WebResourceRequest, error: WebResourceError
             ) {
                 super.onReceivedError(view, request, error)
                 webview.loadUrl("file:///android_asset/error.html")
@@ -479,7 +462,7 @@ class MainActivity : AppCompatActivity() {
 //        var trustManagerFactory: TrustManagerFactory
 //        try {
 //            trustManagerFactory =
-//                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+//                TrustManagerFactory.getInstance(TrustManagerpFactory.getDefaultAlgorithm())
 //            trustManagerFactory.init(trustedCertificate)
 //        } catch (e: NoSuchAlgorithmException) {
 //            e.printStackTrace()

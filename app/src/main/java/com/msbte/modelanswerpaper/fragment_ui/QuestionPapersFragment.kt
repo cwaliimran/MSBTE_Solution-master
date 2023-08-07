@@ -27,6 +27,7 @@ import com.msbte.modelanswerpaper.R
 import com.msbte.modelanswerpaper.adapter.DocumentAdapter
 import com.msbte.modelanswerpaper.databinding.FragmentQuestionPapersBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
+import com.msbte.modelanswerpaper.utils.OnClickInteface
 
 /**
  * A simple [Fragment] subclass.
@@ -40,6 +41,7 @@ class QuestionPapersFragment : Fragment() {
     private lateinit var mDatabase: DatabaseReference
     private lateinit var documentAdapter: DocumentAdapter
     private lateinit var binding: FragmentQuestionPapersBinding
+
     private var mRewardedAd: RewardedAd ? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +54,10 @@ class QuestionPapersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        if (binding == null) binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_question_papers, container, false)
-        binding!!.lifecycleOwner = viewLifecycleOwner
-        return binding!!.root
+    ): View
+    {
+        binding = FragmentQuestionPapersBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,13 +74,13 @@ class QuestionPapersFragment : Fragment() {
     }
 
     private fun loadData() {
-        if (documentAdapter != null && !documentAdapter!!.checkListIsEmpty()) {
+        if (documentAdapter != null && !documentAdapter.checkListIsEmpty()) {
             return
         }
-        binding!!.progressBar.visibility = View.VISIBLE
-        binding!!.tvText.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvText.visibility = View.GONE
         mDatabase = FirebaseDatabase.getInstance().reference
-        mDatabase!!.child("stream_data").child("pdf").child(mParam2!!)
+        mDatabase.child("stream_data").child("pdf").child(mParam2)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot != null && snapshot.childrenCount != 0L) {
@@ -93,49 +93,50 @@ class QuestionPapersFragment : Fragment() {
                                 list.add(model)
                             }
                         }
-                        documentAdapter!!.setData(list)
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.GONE
+                        documentAdapter.setData(list)
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.GONE
                     } else {
-                        documentAdapter!!.setData(ArrayList())
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.VISIBLE
+                        documentAdapter.setData(ArrayList())
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    documentAdapter!!.setData(ArrayList())
+                    documentAdapter.setData(ArrayList())
                 }
             })
     }
 
     private fun setupAdapter() {
-        binding!!.imgBack.setOnClickListener { findNavController(binding!!.root).popBackStack() }
+        binding.imgBack.setOnClickListener { findNavController(binding.root).popBackStack() }
         if (TextUtils.isEmpty(mParam1)) {
             return
         }
-        binding!!.tvTitle.text = mParam1
-        if (documentAdapter != null && !documentAdapter!!.checkListIsEmpty()) {
-            return
-        }
-//        documentAdapter = DocumentAdapter { exerciseId, title ->
-//            AlertDialog.Builder(requireActivity()) // alert the person knowing they are about to close
-//                .setTitle("Watch Ad to Continue")
-//                .setMessage("Watch Ad to see the PDF File")
-//                .setPositiveButton("Watch") { dialog, which -> loadreward(title) }
-//                .setNegativeButton("Cancel") { dialog, which ->
-//                    dialog.dismiss() // Close the dialog
-//                }
-//                .show()
-//        }
-//        binding!!.rvCommon.adapter = documentAdapter
+        binding.tvTitle.text = mParam1
+
+        documentAdapter = DocumentAdapter(object : OnClickInteface{
+            override fun onCLickItem(exerciseId: Int, title: CommonItemModel) {
+                AlertDialog.Builder(requireActivity()) // alert the person knowing they are about to close
+                    .setTitle("Watch Ad to Continue")
+                    .setMessage("Watch Ad to see the PDF File")
+                    .setPositiveButton("Watch") { dialog, which -> loadreward(title) }
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        dialog.dismiss() // Close the dialog
+                    }
+                    .show()
+            }
+
+        })
+        binding.rvCommon.adapter = documentAdapter
     }
 
     private fun backPressListner() {
         requireActivity().onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController(binding!!.root).popBackStack()
+                    findNavController(binding.root).popBackStack()
                 }
             })
     }
@@ -171,11 +172,11 @@ class QuestionPapersFragment : Fragment() {
                     Log.d(ContentValues.TAG, "Ad dismissed fullscreen content.")
                     mRewardedAd = null
                     //                    setAds();
-                    binding!!.progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                     val bundle = Bundle()
                     bundle.putString(ARG_PARAM1, title.name)
                     bundle.putString(ARG_PARAM2, title.path)
-                    findNavController(binding!!.root)
+                    findNavController(binding.root)
                         .navigate(
                             R.id.action_questionPapersFragment_to_questionPaperViewerFragment,
                             bundle
@@ -185,13 +186,13 @@ class QuestionPapersFragment : Fragment() {
         } else {
 
 //            StartAppAd.showAd(getContext());
-            binding!!.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
             Log.d(ContentValues.TAG, "The rewarded ad wasn't ready yet.I'm Calling Again")
             //            Toast.makeText(getContext(), "No Ads available right now. Try after some time", Toast.LENGTH_LONG).show();
             val bundle = Bundle()
             bundle.putString(ARG_PARAM1, title.name)
             bundle.putString(ARG_PARAM2, title.path)
-            findNavController(binding!!.root)
+            findNavController(binding.root)
                 .navigate(R.id.action_questionPapersFragment_to_questionPaperViewerFragment, bundle)
         }
     }

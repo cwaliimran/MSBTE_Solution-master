@@ -17,5 +17,7 @@
         <string name="intrestial_id">ca-app-pub-3940256099942544/1033173712</string>
         <string name="openads">ca-app-pub-3940256099942544/3419835294</string>
         <string name="appid">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="back_button_description">Go back</string>
+    <string name="projects">Projects</string>
 
 </resources>

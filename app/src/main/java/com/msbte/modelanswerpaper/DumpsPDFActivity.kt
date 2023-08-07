@@ -2,6 +2,7 @@ package com.msbte.modelanswerpaper
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -21,6 +22,7 @@ class DumpsPDFActivity : AppCompatActivity() {
     var rewardAmount = 0
     private lateinit var webview: WebView
     private lateinit var progressBar: ProgressBar
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +30,7 @@ class DumpsPDFActivity : AppCompatActivity() {
 
         // To prevent an Android application from taking screenshots and recording the screen
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
+            WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
         )
 
         // prevent the keyboard from appearing
@@ -95,15 +96,12 @@ class DumpsPDFActivity : AppCompatActivity() {
                     .setPositiveButton("Ok") { dialog, which ->
                         progressBar.setProgress(0)
                         progressBar.setVisibility(View.GONE)
-                    }
-                    .show()
+                    }.show()
             })
         } catch (e: Exception) {
             Toast.makeText(this@DumpsPDFActivity, "Something Went Wrong!", Toast.LENGTH_LONG).show()
             Toast.makeText(
-                this@DumpsPDFActivity,
-                "Please Check Your Internet Connection...",
-                Toast.LENGTH_LONG
+                this@DumpsPDFActivity, "Please Check Your Internet Connection...", Toast.LENGTH_LONG
             ).show()
         }
         netcheck()
@@ -111,9 +109,13 @@ class DumpsPDFActivity : AppCompatActivity() {
 
     private inner class WebViewClientDemo : WebViewClient() {
         //Keep webview in app when clicking links
-        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            view.loadUrl(url)
+        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+            webview.loadUrl(websiteURL)
             return true
+        }
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
         }
 
         override fun onPageFinished(view: WebView, url: String) {

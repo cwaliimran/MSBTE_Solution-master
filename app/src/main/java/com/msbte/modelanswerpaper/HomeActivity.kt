@@ -2,7 +2,6 @@ package com.msbte.modelanswerpaper
 
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -39,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.mytoolbar)
         setSupportActionBar(toolbar)
         MobileAds.initialize(this) { }
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val imageSlider = findViewById<ImageSlider>(R.id.image_slider)
         val slideModels: MutableList<SlideModel> = ArrayList()
         slideModels.add(
@@ -148,7 +146,7 @@ class HomeActivity : AppCompatActivity() {
                                     intenttransf =
                                         Intent(
                                             applicationContext,
-                                            microproject_activity::class.java
+                                            MicroProjectActivity::class.java
                                         )
                                     startActivity(intenttransf)
                                     mInterstitialAd = null
@@ -156,7 +154,7 @@ class HomeActivity : AppCompatActivity() {
                                 }
                             }
                     } else {
-                        intenttransf = Intent(applicationContext, microproject_activity::class.java)
+                        intenttransf = Intent(applicationContext, MicroProjectActivity::class.java)
                         startActivity(intenttransf)
                         //                            setAds();
                     }

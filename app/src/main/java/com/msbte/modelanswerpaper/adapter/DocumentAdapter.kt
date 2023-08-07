@@ -10,10 +10,9 @@ import com.msbte.modelanswerpaper.databinding.ItemDownloadOnlineBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
 import com.msbte.modelanswerpaper.utils.OnClickInteface
 
-class DocumentAdapter(homeInterface: OnClickInteface) :
+class DocumentAdapter(var  homeInterface: OnClickInteface) :
     RecyclerView.Adapter<DocumentAdapter.HomeViewHolder>() {
     private var commonItemModelList: MutableList<CommonItemModel> = mutableListOf()
-    var homeInterface: OnClickInteface
     private var mLastClickTime: Long = 0
     fun checkListIsEmpty(): Boolean {
         return if (commonItemModelList == null || commonItemModelList!!.size == 0) true else false

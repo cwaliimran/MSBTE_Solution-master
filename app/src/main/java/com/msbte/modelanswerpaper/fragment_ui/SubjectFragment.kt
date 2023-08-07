@@ -19,6 +19,7 @@ import com.msbte.modelanswerpaper.R
 import com.msbte.modelanswerpaper.adapter.CommonItemAdapter
 import com.msbte.modelanswerpaper.databinding.FragmentSubjectBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
+import com.msbte.modelanswerpaper.utils.OnClickInteface
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +33,7 @@ class SubjectFragment : Fragment() {
     private lateinit var mDatabase: DatabaseReference
     private lateinit var commonItemAdapter: CommonItemAdapter
     private lateinit var binding: FragmentSubjectBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -43,12 +45,10 @@ class SubjectFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        if (binding == null) binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_subject, container, false)
-        binding!!.lifecycleOwner = viewLifecycleOwner
-        return binding!!.root
+    ): View
+    {
+        binding = FragmentSubjectBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,16 +64,16 @@ class SubjectFragment : Fragment() {
     }
 
     private fun loadData() {
-        if (commonItemAdapter != null && !commonItemAdapter!!.checkListIsEmpty()) {
+        if (!commonItemAdapter.checkListIsEmpty()) {
             return
         }
-        binding!!.progressBar.visibility = View.VISIBLE
-        binding!!.tvText.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvText.visibility = View.GONE
         mDatabase = FirebaseDatabase.getInstance().reference
-        mDatabase!!.child("stream_data").child("subject").child(mParam2!!)
+        mDatabase.child("stream_data").child("subject").child(mParam2)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot != null && snapshot.childrenCount != 0L) {
+                    if (snapshot.childrenCount != 0L) {
                         val list: MutableList<CommonItemModel?> = ArrayList()
                         for (postSnapshot in snapshot.children) {
                             val model = postSnapshot.getValue(
@@ -81,40 +81,47 @@ class SubjectFragment : Fragment() {
                             )
                             list.add(model)
                         }
-                        commonItemAdapter!!.setData(list)
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.GONE
+                        commonItemAdapter.setData(list)
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.GONE
                     } else {
-                        commonItemAdapter!!.setData(ArrayList())
-                        binding!!.progressBar.visibility = View.GONE
-                        binding!!.tvText.visibility = View.VISIBLE
+                        commonItemAdapter.setData(ArrayList())
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvText.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    commonItemAdapter!!.setData(ArrayList())
+                    commonItemAdapter.setData(ArrayList())
                 }
             })
     }
 
     private fun setupAdapter() {
-        binding!!.imgBack.setOnClickListener { findNavController(binding!!.root).popBackStack() }
+        binding.imgBack.setOnClickListener { findNavController(binding.root).popBackStack() }
         if (TextUtils.isEmpty(mParam1)) {
             return
         }
-        binding!!.tvTitle.text = mParam1
-        if (commonItemAdapter != null && !commonItemAdapter!!.checkListIsEmpty()) {
-            return
-        }
-        commonItemAdapter = CommonItemAdapter()
-        binding!!.rvCommon.adapter = commonItemAdapter
+        binding.tvTitle.text = mParam1
+
+        commonItemAdapter = CommonItemAdapter(mutableListOf(),object : OnClickInteface {
+            override fun onCLickItem(exerciseId: Int, title: CommonItemModel) {
+                val bundle = Bundle()
+                bundle.putString(ARG_PARAM1, title.name)
+                bundle.putString(ARG_PARAM2, title.sub_domain)
+                findNavController(binding.root)
+                    .navigate(R.id.action_subjectFragment_to_questionPapersFragment, bundle)
+
+            }
+        })
+        binding.rvCommon.adapter = commonItemAdapter
     }
 
     private fun backPressListner() {
         requireActivity().onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController(binding!!.root).popBackStack()
+                    findNavController(binding.root).popBackStack()
                 }
             })
     }
