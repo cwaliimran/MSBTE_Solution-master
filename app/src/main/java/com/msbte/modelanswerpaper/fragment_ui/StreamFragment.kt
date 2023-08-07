@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -48,8 +47,7 @@ class StreamFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View
-    {
+    ): View {
         binding = FragmentStreamBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -104,7 +102,7 @@ class StreamFragment : Fragment() {
         binding.imgBack.setOnClickListener { //                showAlertDialog("Exit", "Are you sure, want to exist from app?", 2);
             requireActivity().finish()
         }
-        commonItemAdapter = CommonItemAdapter(mutableListOf(),object : OnClickInteface {
+        commonItemAdapter = CommonItemAdapter(mutableListOf(), object : OnClickInteface {
             override fun onCLickItem(exerciseId: Int, title: CommonItemModel) {
                 val bundle = Bundle()
                 bundle.putString(ARG_PARAM1, title.name)
@@ -140,10 +138,6 @@ class StreamFragment : Fragment() {
             .setNegativeButton(android.R.string.cancel) { dialogInterface, i -> dialogInterface.cancel() }
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     companion object {

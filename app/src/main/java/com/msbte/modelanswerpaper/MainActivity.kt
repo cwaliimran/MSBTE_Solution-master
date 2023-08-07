@@ -20,7 +20,6 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.webkit.SslErrorHandler
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         layout = findViewById(R.id.layout)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         MobileAds.initialize(this) { }
 
 //        IronSource.init(MainActivity.this, "1201f8ea5", IronSource.AD_UNIT.REWARDED_VIDEO);
@@ -70,23 +69,15 @@ class MainActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
         mAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-            }
 
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                // Code to be executed when an ad request fails.
-                super.onAdFailedToLoad(adError)
-                //                mAdView.loadAd(adRequest);
-            }
         }
 
 //        setAds();
         websiteURL = intent.getStringExtra("url").toString()
         val intent = intent
         progressBar = findViewById(R.id.progress_bar)
-        progressBar.setMax(100)
-        progressBar.getProgressDrawable().setColorFilter(
+        progressBar.max = 100
+        progressBar.progressDrawable.setColorFilter(
             Color.RED, PorterDuff.Mode.SRC_IN
         )
         netcheck()
@@ -103,16 +94,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             //Webview stuff
             webview = findViewById(R.id.webView)
-            webview.setWebViewClient(WebViewClientDemo())
-            webview.getSettings().javaScriptEnabled = true
-            webview.getSettings().domStorageEnabled = true
-            webview.getSettings().loadsImagesAutomatically = true
-            webview.getSettings().builtInZoomControls = true
-            webview.getSettings().useWideViewPort = true
-            webview.getSettings().allowFileAccessFromFileURLs = true
-            webview.getSettings().allowUniversalAccessFromFileURLs = true
+            webview.webViewClient = WebViewClientDemo()
+            webview.settings.javaScriptEnabled = true
+            webview.settings.domStorageEnabled = true
+            webview.settings.loadsImagesAutomatically = true
+            webview.settings.builtInZoomControls = true
+            webview.settings.useWideViewPort = true
+            webview.settings.allowFileAccessFromFileURLs = true
+            webview.settings.allowUniversalAccessFromFileURLs = true
             webview.clearSslPreferences()
-            webview.setOverScrollMode(WebView.OVER_SCROLL_NEVER)
+            webview.overScrollMode = WebView.OVER_SCROLL_NEVER
 
             //Those other methods I tried out of despair just in case
             webview.clearFormData()
@@ -122,9 +113,9 @@ class MainActivity : AppCompatActivity() {
 
 
             // Add SSL related configurations
-            webview.getSettings().mixedContentMode =
+            webview.settings.mixedContentMode =
                 WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE // Allow loading mixed content
-            webview.getSettings().blockNetworkLoads = false // Allow network loads
+            webview.settings.blockNetworkLoads = false // Allow network loads
 
             webview.webViewClient = WebViewClient()
             webview.loadUrl("file:///android_asset/drive_embed.html")
@@ -144,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         }
         netcheck()
         try {
-            webview!!.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+            webview.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
                 netcheck()
 
 //                    String webUrl = webview.getUrl();
@@ -158,8 +149,8 @@ class MainActivity : AppCompatActivity() {
                     .setTitle("Attention all users \uD83D\uDEAB")
                     .setMessage("The downloading feature was closed. We apologize for any inconvenience caused.")
                     .setPositiveButton("Ok") { dialog, which ->
-                        progressBar.setProgress(0)
-                        progressBar.setVisibility(View.GONE)
+                        progressBar.progress = 0
+                        progressBar.visibility = View.GONE
                     }.show()
             }
         } catch (e: Exception) {
@@ -188,7 +179,7 @@ class MainActivity : AppCompatActivity() {
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
             request.setDestinationUri(Uri.fromFile(result))
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            downloadManager?.enqueue(request)
+            downloadManager.enqueue(request)
             //mToast(mContext, "Starting download...");
             MediaScannerConnection.scanFile(
                 this@MainActivity, arrayOf(result.toString()), null
@@ -235,8 +226,8 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                progressBar!!.progress = 0
-                progressBar!!.visibility = View.GONE
+                progressBar.progress = 0
+                progressBar.visibility = View.GONE
             }
             mRewardedAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -248,8 +239,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else {
-            progressBar!!.progress = 0
-            progressBar!!.visibility = View.GONE
+            progressBar.progress = 0
+            progressBar.visibility = View.GONE
             Log.d(ContentValues.TAG, "The rewarded ad wasn't ready yet.I'm Calling Again")
             Toast.makeText(
                 this, "No Ads available right now. Try after some time", Toast.LENGTH_LONG
@@ -396,28 +387,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        //        IronSource.onResume(this);
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //        IronSource.onPause(this);
-    }
-
     //set back button functionality
     override fun onBackPressed() { //if user presses the back button do this
-        if (webview!!.isFocused && webview!!.canGoBack()) { //check if in webview and the user can go back
-            webview!!.goBack() //go back in webview
+        if (webview.isFocused && webview.canGoBack()) { //check if in webview and the user can go back
+            webview.goBack() //go back in webview
         } else { //do this if the webview cannot go back any further
             // review
             manager = ReviewManagerFactory.create(this@MainActivity)
-            val request1 = manager!!.requestReviewFlow()
+            val request1 = manager.requestReviewFlow()
             request1.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     reviewInfo = task.result
-                    val flow = manager!!.launchReviewFlow(this@MainActivity, reviewInfo!!)
+                    val flow = manager.launchReviewFlow(this@MainActivity, reviewInfo)
                     flow.addOnSuccessListener { }
                 } else {
                     Toast.makeText(this@MainActivity, "Something Went Wrong", Toast.LENGTH_SHORT)
@@ -426,7 +407,7 @@ class MainActivity : AppCompatActivity() {
             }
             // review end
             if (backPressedTime + 2000 > System.currentTimeMillis()) {
-                backToast!!.cancel()
+                backToast.cancel()
                 super.onBackPressed()
                 return
             } else {
@@ -448,14 +429,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadu() {
         webview = findViewById(R.id.webView)
-        webview.setWebViewClient(object : WebViewClient() {
+        webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError
             ) {
                 super.onReceivedError(view, request, error)
                 webview.loadUrl("file:///android_asset/error.html")
             }
-        })
+        }
     }
 
 //    private fun getTrustManagerFactory(trustedCertificate: KeyStore): TrustManagerFactory? {

@@ -28,7 +28,7 @@ class DumpsActivity : AppCompatActivity(), PaymentResultListener {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar.mytoolbar)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
 
         setupButtons()

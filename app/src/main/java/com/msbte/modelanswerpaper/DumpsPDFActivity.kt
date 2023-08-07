@@ -70,7 +70,8 @@ class DumpsPDFActivity : AppCompatActivity() {
             webview.webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, newProgress: Int) {
                     progressBar.progress = newProgress
-                    if (newProgress == 100) progressBar.visibility = View.GONE else progressBar.visibility =
+                    if (newProgress == 100) progressBar.visibility =
+                        View.GONE else progressBar.visibility =
                         View.VISIBLE
                     netcheck()
                     super.onProgressChanged(view, newProgress)

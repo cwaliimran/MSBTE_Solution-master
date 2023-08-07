@@ -21,7 +21,7 @@ class MicroProjectActivity : AppCompatActivity() {
     lateinit var recview: RecyclerView
     lateinit var adapter: MyProjectDownloadAdapter
     private lateinit var toolbar: Toolbar
-    private var mData = mutableListOf<model>()
+    private var mData = mutableListOf<CommonModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +66,10 @@ class MicroProjectActivity : AppCompatActivity() {
                 // Loop through all the children of the "project" node
                 for (snapshot in dataSnapshot.children) {
                     // Deserialize the data into your model class
-                    val modelData = snapshot.getValue(model::class.java)
+                    val commonModelData = snapshot.getValue(CommonModel::class.java)
 
-                    if (modelData != null) {
-                        mData.add(modelData)
+                    if (commonModelData != null) {
+                        mData.add(commonModelData)
                     }
                 }
                 adapter.notifyDataSetChanged()

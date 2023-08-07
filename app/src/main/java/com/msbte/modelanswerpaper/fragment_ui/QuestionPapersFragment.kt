@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.google.android.gms.ads.AdRequest
@@ -42,7 +41,7 @@ class QuestionPapersFragment : Fragment() {
     private lateinit var documentAdapter: DocumentAdapter
     private lateinit var binding: FragmentQuestionPapersBinding
 
-    private var mRewardedAd: RewardedAd ? = null
+    private var mRewardedAd: RewardedAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -54,8 +53,7 @@ class QuestionPapersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View
-    {
+    ): View {
         binding = FragmentQuestionPapersBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -116,7 +114,7 @@ class QuestionPapersFragment : Fragment() {
         }
         binding.tvTitle.text = mParam1
 
-        documentAdapter = DocumentAdapter(object : OnClickInteface{
+        documentAdapter = DocumentAdapter(object : OnClickInteface {
             override fun onCLickItem(exerciseId: Int, title: CommonItemModel) {
                 AlertDialog.Builder(requireActivity()) // alert the person knowing they are about to close
                     .setTitle("Watch Ad to Continue")

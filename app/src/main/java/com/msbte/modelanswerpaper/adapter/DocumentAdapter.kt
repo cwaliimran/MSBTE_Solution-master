@@ -10,7 +10,7 @@ import com.msbte.modelanswerpaper.databinding.ItemDownloadOnlineBinding
 import com.msbte.modelanswerpaper.models.CommonItemModel
 import com.msbte.modelanswerpaper.utils.OnClickInteface
 
-class DocumentAdapter(var  homeInterface: OnClickInteface) :
+class DocumentAdapter(var homeInterface: OnClickInteface) :
     RecyclerView.Adapter<DocumentAdapter.HomeViewHolder>() {
     private var commonItemModelList: MutableList<CommonItemModel> = mutableListOf()
     private var mLastClickTime: Long = 0

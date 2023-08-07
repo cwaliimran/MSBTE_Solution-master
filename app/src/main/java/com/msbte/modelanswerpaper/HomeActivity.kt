@@ -108,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
 //            .handler(this)
 //        inAppUpdateManager.checkForAppUpdate()
         gridView = findViewById<View>(R.id.gridView1) as RecyclerView
-        gridView!!.adapter = ImageAdapter(MOBILE_OS, object : OnItemClick {
+        gridView.adapter = ImageAdapter(MOBILE_OS, object : OnItemClick {
             override fun onClick(position: Int, type: String?, data: Any?) {
                 val name = data.toString()
                 when (name) {
@@ -132,7 +132,7 @@ class HomeActivity : AppCompatActivity() {
                         intenttransf = Intent(applicationContext, MainActivity::class.java)
                         eurl =
                             "https://drive.google.com/drive/folders/1t_lRCTROxXT8XdplqgIf64c31f1vqXoD?usp=sharing"
-                        intenttransf!!.putExtra("url", eurl)
+                        intenttransf.putExtra("url", eurl)
                         startActivity(intenttransf)
                         //                            setAds();
                     }
@@ -212,7 +212,7 @@ class HomeActivity : AppCompatActivity() {
                                         Toast.LENGTH_LONG
                                     ).show()
                                     eurl = "https://econtent.msbte.ac.in/econtent/econtent_home.php"
-                                    intenttransf!!.putExtra("url", eurl)
+                                    intenttransf.putExtra("url", eurl)
                                     startActivity(intenttransf)
                                     mInterstitialAd = null
                                     //                                    setAds();
@@ -226,7 +226,7 @@ class HomeActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                         eurl = "https://econtent.msbte.ac.in/econtent/econtent_home.php"
-                        intenttransf!!.putExtra("url", eurl)
+                        intenttransf.putExtra("url", eurl)
                         startActivity(intenttransf)
 
 //                            setAds();
@@ -348,7 +348,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onBackPressed() { //double press to exit
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
-            backToast!!.cancel()
+            backToast.cancel()
             super.onBackPressed()
             return
         } else {

@@ -4,8 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 
 object CheckNetwork {
     private val TAG = CheckNetwork::class.java.simpleName

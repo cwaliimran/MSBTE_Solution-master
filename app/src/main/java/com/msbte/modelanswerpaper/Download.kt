@@ -18,14 +18,13 @@ import java.io.File
 
 class Download : AppCompatActivity() {
     lateinit var name: String
-    lateinit var fileeurl: String
-    var rewardAmount = 0
+    private lateinit var fileUrl: String
     lateinit var redown: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download)
         name = intent.getStringExtra("filename").toString()
-        fileeurl = intent.getStringExtra("fileurl").toString()
+        fileUrl = intent.getStringExtra("fileurl").toString()
         val intent = intent
 
 //        IronSource.init(download.this, "1201f8ea5", IronSource.AD_UNIT.REWARDED_VIDEO);
@@ -76,7 +75,7 @@ class Download : AppCompatActivity() {
 
         // gift of users
         try {
-            downloadTask(fileeurl, name)
+            downloadTask(fileUrl, name)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -99,7 +98,7 @@ class Download : AppCompatActivity() {
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
             request.setDestinationUri(Uri.fromFile(result))
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            downloadManager?.enqueue(request)
+            downloadManager.enqueue(request)
             //mToast(mContext, "Starting download...");
             MediaScannerConnection.scanFile(
                 this@Download, arrayOf(result.toString()), null
@@ -112,13 +111,4 @@ class Download : AppCompatActivity() {
         return true
     }
 
-    override fun onResume() {
-        super.onResume()
-        //        IronSource.onResume(this);
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //        IronSource.onPause(this);
-    }
 }

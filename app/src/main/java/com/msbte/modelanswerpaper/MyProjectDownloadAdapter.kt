@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.msbte.modelanswerpaper.databinding.CandleIteamBinding
 
-class MyProjectDownloadAdapter(var mData: MutableList<model>) :
+class MyProjectDownloadAdapter(var mData: MutableList<CommonModel>) :
     RecyclerView.Adapter<MyProjectDownloadAdapter.MyViewHolder>() {
     lateinit var context: Context
 

@@ -202,12 +202,12 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
 
     private fun backPressListner() {
         requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        findNavController(binding.root).popBackStack()
-                    }
-                })
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController(binding.root).popBackStack()
+                }
+            })
     }
 
     private inner class SSLTolerentWebViewClient : WebViewClient() {
@@ -237,6 +237,7 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
             alertDialog.show()
         }
     }
+
     companion object {
         private const val ARG_PARAM1 = "param1"
         private const val ARG_PARAM2 = "param2"
