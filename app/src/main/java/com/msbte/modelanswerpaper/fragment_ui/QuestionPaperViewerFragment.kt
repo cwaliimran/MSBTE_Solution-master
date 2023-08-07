@@ -138,19 +138,6 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
             WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE // Allow loading mixed content
         binding.webView.settings.blockNetworkLoads = false // Allow network loads
 
-
-//        binding.webView.setWebViewClient(new MyclientWebView());
-
-//        binding.webView.getSettings().setJavaScriptEnabled(true);
-//        binding.webView.getSettings().setUserAgentString("Mozilla/5.0 (Linux; U; Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13");
-//        binding.webView.getSettings().setLoadWithOverviewMode(true);
-//        binding.webView.getSettings().setUseWideViewPort(true);
-//        binding.webView.getSettings().setAllowFileAccess(true);
-//        binding.webView.getSettings().setAllowContentAccess(true);
-//        binding.webView.getSettings().setBuiltInZoomControls(true);
-//        binding.webView.getSettings().setAllowFileAccessFromFileURLs(true);
-//        binding.webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-//        binding.webView.getSettings().setDomStorageEnabled(true);
         binding.webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
@@ -191,32 +178,6 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
                 binding.webView.loadUrl(url)
                 return true
             }
-
-        //            @Override
-            //            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            //                // Check the error code.
-            //                int errorCode = error.getPrimaryError();
-            //
-            //                if (errorCode == SslError.SSL_UNTRUSTED) {
-            //                    // SSL certificate is untrusted
-            //                    Log.d("TAG", "SSL Error: Untrusted");
-            //                } else if (errorCode == SslError.SSL_EXPIRED) {
-            //                    // SSL certificate has expired
-            //                    Log.d("TAG", "SSL Error: Expired");
-            //                } else if (errorCode == SslError.SSL_IDMISMATCH) {
-            //                    // Hostname mismatch with SSL certificate
-            //                    Log.d("TAG", "SSL Error: Hostname Mismatch");
-            //                } else if (errorCode == SslError.SSL_NOTYETVALID) {
-            //                    // SSL certificate is not yet valid
-            //                    Log.d("TAG", "SSL Error: Not Yet Valid");
-            //                } else {
-            //                    // Other SSL errors
-            //                    Log.d("TAG", "SSL Error: " + errorCode);
-            //                }
-            //                // Proceed with the connection (may not be secure)
-            //                handler.proceed();
-            //
-            //            }
         }
         binding.webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$url")
     }
@@ -275,71 +236,11 @@ class QuestionPaperViewerFragment @SuppressLint("WebViewClientOnReceivedSslError
             ) { dialog, which -> handler.cancel() }
             alertDialog.show()
         }
-    } //    public class MyclientWebView extends WebViewClient {
-
-    //
-    //        @Override
-    //        public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-    //
-    //            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-    //            String message = "SSL Certificate error.";
-    //            switch (error.getPrimaryError()) {
-    //                case SslError.SSL_UNTRUSTED:
-    //                    message = "The certificate authority is not trusted.";
-    //                    break;
-    //                case SslError.SSL_EXPIRED:
-    //                    message = "The certificate has expired.";
-    //                    break;
-    //                case SslError.SSL_IDMISMATCH:
-    //                    message = "The certificate Hostname mismatch.";
-    //                    break;
-    //                case SslError.SSL_NOTYETVALID:
-    //                    message = "The certificate is not yet valid.";
-    //                    break;
-    //            }
-    //            message += " Do you want to continue anyway?";
-    //
-    //            builder.setTitle("SSL Certificate Error");
-    //            builder.setMessage(message);
-    //            builder.setPositiveButton("continue", (dialog, which) -> handler.proceed());
-    //            builder.setNegativeButton("cancel", (dialog, which) -> handler.cancel());
-    //            final AlertDialog dialog = builder.create();
-    //            dialog.show();
-    //
-    //
-    ////            final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-    ////            builder.setMessage(R.string.notification_error_ssl_cert_invalid);
-    ////            builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-    ////                @Override
-    ////                public void onClick(DialogInterface dialog, int which) {
-    ////                    handler.proceed();
-    ////                }
-    ////            });
-    ////            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-    ////                @Override
-    ////                public void onClick(DialogInterface dialog, int which) {
-    ////                    handler.cancel();
-    ////                }
-    ////            });
-    ////            final AlertDialog dialog = builder.create();
-    ////            dialog.show();
-    //        }
-    //    }
+    }
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private const val ARG_PARAM1 = "param1"
         private const val ARG_PARAM2 = "param2"
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment QuestionPaperViewerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String?, param2: String?): QuestionPaperViewerFragment {
             val fragment = QuestionPaperViewerFragment()
             val args = Bundle()

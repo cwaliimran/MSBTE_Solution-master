@@ -15,12 +15,11 @@ class DocumentAdapter(var  homeInterface: OnClickInteface) :
     private var commonItemModelList: MutableList<CommonItemModel> = mutableListOf()
     private var mLastClickTime: Long = 0
     fun checkListIsEmpty(): Boolean {
-        return if (commonItemModelList == null || commonItemModelList!!.size == 0) true else false
+        return commonItemModelList.size == 0
     }
 
     fun setData(list: MutableList<CommonItemModel>) {
-        if (commonItemModelList != null) commonItemModelList!!.clear() else commonItemModelList =
-            ArrayList()
+        commonItemModelList.clear()
         commonItemModelList.addAll(list)
         notifyDataSetChanged()
     }
@@ -31,13 +30,11 @@ class DocumentAdapter(var  homeInterface: OnClickInteface) :
         )
 
     init {
-        if (commonItemModelList == null) commonItemModelList = ArrayList()
-        this.homeInterface = homeInterface
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long {
-        return commonItemModelList!![position].name.hashCode().toLong()
+        return commonItemModelList[position].name.hashCode().toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -50,7 +47,7 @@ class DocumentAdapter(var  homeInterface: OnClickInteface) :
         holder: HomeViewHolder,
         @SuppressLint("RecyclerView") position: Int
     ) {
-        val exerciseResponseModel = commonItemModelList!![position]
+        val exerciseResponseModel = commonItemModelList[position]
         holder.itemCommonUiBinding.tvText.text = "" + exerciseResponseModel.name
         holder.itemCommonUiBinding.btnOnline.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -62,6 +59,6 @@ class DocumentAdapter(var  homeInterface: OnClickInteface) :
     }
 
     override fun getItemCount(): Int {
-        return if (commonItemModelList != null && commonItemModelList!!.size != 0) commonItemModelList!!.size else 0
+        return if (commonItemModelList.size != 0) commonItemModelList.size else 0
     }
 }

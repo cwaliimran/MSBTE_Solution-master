@@ -35,7 +35,7 @@ import com.msbte.modelanswerpaper.utils.OnClickInteface
  * create an instance of this fragment.
  */
 class QuestionPapersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private lateinit var mParam1: String
     private lateinit var mParam2: String
     private lateinit var mDatabase: DatabaseReference
@@ -74,7 +74,7 @@ class QuestionPapersFragment : Fragment() {
     }
 
     private fun loadData() {
-        if (documentAdapter != null && !documentAdapter.checkListIsEmpty()) {
+        if (!documentAdapter.checkListIsEmpty()) {
             return
         }
         binding.progressBar.visibility = View.VISIBLE
@@ -83,7 +83,7 @@ class QuestionPapersFragment : Fragment() {
         mDatabase.child("stream_data").child("pdf").child(mParam2)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot != null && snapshot.childrenCount != 0L) {
+                    if (snapshot.childrenCount != 0L) {
                         val list: MutableList<CommonItemModel> = ArrayList()
                         for (postSnapshot in snapshot.children) {
                             val model = postSnapshot.getValue(
@@ -198,20 +198,9 @@ class QuestionPapersFragment : Fragment() {
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private const val ARG_PARAM1 = "param1"
         private const val ARG_PARAM2 = "param2"
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment QuestionPapersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String?, param2: String?): QuestionPapersFragment {
             val fragment = QuestionPapersFragment()
             val args = Bundle()

@@ -37,8 +37,8 @@ class DumpsPDFActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         progressBar = findViewById(R.id.progress_bar5)
         webview = findViewById(R.id.webView5)
-        progressBar.setMax(100)
-        progressBar.getProgressDrawable().setColorFilter(
+        progressBar.max = 100
+        progressBar.progressDrawable.setColorFilter(
             Color.RED, PorterDuff.Mode.SRC_IN
         )
         netcheck()
@@ -56,27 +56,26 @@ class DumpsPDFActivity : AppCompatActivity() {
                 .show()
         } else {
             //Webview stuff
-            webview.setWebViewClient(WebViewClientDemo())
-            webview.getSettings().javaScriptEnabled = true
-            webview.getSettings().domStorageEnabled = true
-            webview.getSettings().loadsImagesAutomatically = true
-            webview.getSettings().builtInZoomControls = true
-            webview.getSettings().useWideViewPort = true
-            webview.setOverScrollMode(WebView.OVER_SCROLL_NEVER)
-            webview.loadUrl(websiteURL!!)
-            webview.loadUrl(websiteURL!!)
-            progressBar.setProgress(0)
+            webview.webViewClient = WebViewClientDemo()
+            webview.settings.javaScriptEnabled = true
+            webview.settings.domStorageEnabled = true
+            webview.settings.loadsImagesAutomatically = true
+            webview.settings.builtInZoomControls = true
+            webview.settings.useWideViewPort = true
+            webview.overScrollMode = WebView.OVER_SCROLL_NEVER
+            webview.loadUrl(websiteURL)
+            webview.loadUrl(websiteURL)
+            progressBar.progress = 0
             netcheck()
-            webview.setWebChromeClient(object : WebChromeClient() {
+            webview.webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, newProgress: Int) {
-                    progressBar.setProgress(newProgress)
-                    if (newProgress == 100) progressBar.setVisibility(View.GONE) else progressBar.setVisibility(
+                    progressBar.progress = newProgress
+                    if (newProgress == 100) progressBar.visibility = View.GONE else progressBar.visibility =
                         View.VISIBLE
-                    )
                     netcheck()
                     super.onProgressChanged(view, newProgress)
                 }
-            })
+            }
             netcheck()
         }
         try {
@@ -94,8 +93,8 @@ class DumpsPDFActivity : AppCompatActivity() {
                     .setTitle("Attention all users \uD83D\uDEAB")
                     .setMessage("The downloading feature was closed. We apologize for any inconvenience caused.")
                     .setPositiveButton("Ok") { dialog, which ->
-                        progressBar.setProgress(0)
-                        progressBar.setVisibility(View.GONE)
+                        progressBar.progress = 0
+                        progressBar.visibility = View.GONE
                     }.show()
             })
         } catch (e: Exception) {

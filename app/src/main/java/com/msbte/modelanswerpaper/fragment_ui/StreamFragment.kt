@@ -28,7 +28,7 @@ import com.msbte.modelanswerpaper.utils.OnClickInteface
  * create an instance of this fragment.
  */
 class StreamFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private lateinit var mParam1: String
     private lateinit var mParam2: String
 
@@ -126,22 +126,6 @@ class StreamFragment : Fragment() {
                 }
             })
 
-        // for getting calback of exercise solved if true --> refetch data list.
-        /*    Navigation.findNavController(binding.getRoot()).
-                getCurrentBackStackEntry().getSavedStateHandle().getLiveData(ARG_PARAM1)
-                .observe(getViewLifecycleOwner(), result -> {
-                    try {
-//                        Log.d("TAG", "getCurrentBackStackEntry: " + ((Boolean) result));
-                        if (((Boolean) result)) {
-                            reload();
-                        }
-
-                    } catch (Exception exception) {
-                        Log.d("TAG", " ");
-                    }
-                });
-
-*/
     }
 
     private fun showAlertDialog(title: String, subtitle: String, i: Int) {
@@ -163,20 +147,10 @@ class StreamFragment : Fragment() {
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
         private const val ARG_PARAM1 = "param1"
         private const val ARG_PARAM2 = "param2"
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StreamFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String?, param2: String?): StreamFragment {
             val fragment = StreamFragment()
             val args = Bundle()

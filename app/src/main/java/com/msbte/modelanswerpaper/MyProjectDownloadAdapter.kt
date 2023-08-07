@@ -22,7 +22,7 @@ class MyProjectDownloadAdapter(var mData: MutableList<model>) :
         val model = mData[position]
         holder.binding.mpname.text = model.filename
         holder.binding.downloadfile2.setOnClickListener {
-            val intent = Intent(holder.binding.downloadfile2.context, download::class.java)
+            val intent = Intent(holder.binding.downloadfile2.context, Download::class.java)
             intent.putExtra("filename", model.filename)
             intent.putExtra("fileurl", model.fileurl)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

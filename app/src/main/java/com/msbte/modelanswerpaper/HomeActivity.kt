@@ -316,7 +316,7 @@ class HomeActivity : AppCompatActivity() {
             }
 
             R.id.dev1 -> try {
-                val intent = Intent(this, About_Activity::class.java)
+                val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
             } catch (e: Exception) {
                 Toast.makeText(applicationContext, "Something Went Wrong", Toast.LENGTH_SHORT)

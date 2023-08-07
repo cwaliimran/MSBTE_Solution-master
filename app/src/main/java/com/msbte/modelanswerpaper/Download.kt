@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 
-class download : AppCompatActivity() {
+class Download : AppCompatActivity() {
     lateinit var name: String
     lateinit var fileeurl: String
     var rewardAmount = 0
@@ -41,13 +41,13 @@ class download : AppCompatActivity() {
             }
         }
         redown = findViewById(R.id.redownload)
-        AlertDialog.Builder(this@download) //alert the person knowing they are about to close
+        AlertDialog.Builder(this@Download) //alert the person knowing they are about to close
             .setTitle("Watch Ad To Download")
             .setMessage("✅ You Need to Watch Full Video Ad to Download File")
             .setPositiveButton("Watch Ad") { dialog, which ->
                 loadreward()
                 Toast.makeText(
-                    this@download,
+                    this@Download,
                     "Ad is Loading Please wait a movement... ",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -55,13 +55,13 @@ class download : AppCompatActivity() {
             .setNegativeButton("No") { dialog, which -> }
             .show()
         redown.setOnClickListener(View.OnClickListener {
-            AlertDialog.Builder(this@download) //alert the person knowing they are about to close
+            AlertDialog.Builder(this@Download) //alert the person knowing they are about to close
                 .setTitle("Watch Ad To Download")
                 .setMessage("✅ You Need to Watch Full Video Ad to Download File")
                 .setPositiveButton("Watch Ad") { dialog, which ->
                     loadreward()
                     Toast.makeText(
-                        this@download,
+                        this@Download,
                         "Ad is Loading Please wait a movement... ",
                         Toast.LENGTH_LONG
                     ).show()
@@ -80,69 +80,6 @@ class download : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-
-//        IronSource.showRewardedVideo("DefaultRewardedVideo");
-//        IronSource.setRewardedVideoListener(new RewardedVideoListener() {
-//
-//            @Override
-//            public void onRewardedVideoAdOpened() {
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdClosed() {
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAvailabilityChanged(boolean available) {
-//                //Change the in-app 'Traffic Driver' state according to availability.
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdRewarded(Placement placement) {
-//                // gift of users
-//                String rewardName = placement.getRewardName();
-//                rewardAmount = placement.getRewardAmount();
-//                try {
-//                    downloadTask(fileeurl,name);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdShowFailed(IronSourceError error) {
-//                StartAppAd.showAd(getApplicationContext());
-//                rewardAmount = 100;
-//                try {
-//                    downloadTask(fileeurl,name);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            /*Invoked when the end user clicked on the RewardedVideo ad
-//             */
-//            @Override
-//            public void onRewardedVideoAdClicked(Placement placement) {
-//
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdStarted() {
-//
-//
-//            }
-//
-//            /* Invoked when the video ad finishes plating. */
-//            @Override
-//            public void onRewardedVideoAdEnded() {
-//
-//            }
-//        });
     }
 
     @Throws(Exception::class)
@@ -165,7 +102,7 @@ class download : AppCompatActivity() {
             downloadManager?.enqueue(request)
             //mToast(mContext, "Starting download...");
             MediaScannerConnection.scanFile(
-                this@download, arrayOf(result.toString()), null
+                this@Download, arrayOf(result.toString()), null
             ) { path, uri -> }
         } catch (e: Exception) {
             Log.e(">>>>>", e.toString())

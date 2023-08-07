@@ -5,142 +5,36 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.msbte.modelanswerpaper.databinding.ActivityDumpsBinding
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import org.json.JSONException
 import org.json.JSONObject
 
+
 class DumpsActivity : AppCompatActivity(), PaymentResultListener {
-    lateinit var cb1: CheckBox
-    lateinit var cb2: CheckBox
-    lateinit var cb3: CheckBox
-    lateinit var cb4: CheckBox
-    lateinit var cb5: CheckBox
-    lateinit var b1: Button
-    lateinit var b2: Button
-    lateinit var b3: Button
-    lateinit var b4: Button
-    lateinit var b5: Button
-    lateinit var pr1: TextView
-    lateinit var pr2: TextView
-    lateinit var pr3: TextView
-    lateinit var pr4: TextView
-    lateinit var pr5: TextView
-    lateinit var fprice: TextView
-    lateinit var pstatus: TextView
-    lateinit var paybtn: Button
-    var famount = 0
-    var myIdArr = ArrayList<String>()
+
+    private lateinit var binding: ActivityDumpsBinding
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var intenttransf: Intent
-    lateinit var eurl: String
-    private lateinit var toolbar: Toolbar
+    private var famount = 0
+    private var myIdArr = ArrayList<String>()
+    private lateinit var intenttransf: Intent
+    private lateinit var eurl: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dumps)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        toolbar = findViewById(R.id.mytoolbar)
-        setSupportActionBar(toolbar)
+        binding = ActivityDumpsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar.mytoolbar)
 
-        // Initialize SharedPreferences object
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
 
-        // Get the visibility status from SharedPreferences
-        val isButtonVisible1 = sharedPreferences.getBoolean("b1", false)
-        val isButtonVisible2 = sharedPreferences.getBoolean("b2", false)
-        val isButtonVisible3 = sharedPreferences.getBoolean("b3", false)
-        val isButtonVisible4 = sharedPreferences.getBoolean("b4", false)
-        val isButtonVisible5 = sharedPreferences.getBoolean("b5", false)
-        b1 = findViewById(R.id.button1)
-        b2 = findViewById(R.id.button2)
-        b3 = findViewById(R.id.button3)
-        b4 = findViewById(R.id.button4)
-        b5 = findViewById(R.id.button5)
-        cb1 = findViewById(R.id.checkBox1)
-        cb2 = findViewById(R.id.checkBox2)
-        cb3 = findViewById(R.id.checkBox3)
-        cb4 = findViewById(R.id.checkBox4)
-        cb5 = findViewById(R.id.checkBox5)
-        pr1 = findViewById(R.id.price1)
-        pr2 = findViewById(R.id.price2)
-        pr3 = findViewById(R.id.price3)
-        pr4 = findViewById(R.id.price4)
-        pr5 = findViewById(R.id.price5)
-        pstatus = findViewById(R.id.pstatus)
-        fprice = findViewById(R.id.totaltext)
-        paybtn = findViewById(R.id.idBtnPay)
-        cb1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (cb1.isChecked()) {
-                val price = pr1.getText().toString().toInt()
-                famount = famount + price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.add("b1")
-            } else {
-                val price = pr1.getText().toString().toInt()
-                famount = famount - price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.remove("b1")
-            }
-        })
-        cb2.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (cb2.isChecked()) {
-                val price = pr2.getText().toString().toInt()
-                famount = famount + price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.add("b2")
-            } else {
-                val price = pr2.getText().toString().toInt()
-                famount = famount - price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.remove("b2")
-            }
-        })
-        cb3.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (cb3.isChecked()) {
-                val price = pr3.getText().toString().toInt()
-                famount = famount + price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.add("b3")
-            } else {
-                val price = pr3.getText().toString().toInt()
-                famount = famount - price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.remove("b3")
-            }
-        })
-        cb4.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (cb4.isChecked()) {
-                val price = pr4.getText().toString().toInt()
-                famount = famount + price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.add("b4")
-            } else {
-                val price = pr4.getText().toString().toInt()
-                famount = famount - price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.remove("b4")
-            }
-        })
-        cb5.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (cb5.isChecked()) {
-                val price = pr5.getText().toString().toInt()
-                famount = famount + price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.add("b5")
-            } else {
-                val price = pr4.getText().toString().toInt()
-                famount = famount - price
-                fprice.setText("Total : ₹$famount")
-                myIdArr.remove("b5")
-            }
-        })
-        paybtn.setOnClickListener(View.OnClickListener {
+        setupButtons()
+        setupCheckBoxes()
+
+        binding.idBtnPay.setOnClickListener(View.OnClickListener {
             val samount = famount.toString()
             val amount = Math.round(samount.toFloat() * 100)
             val checkout = Checkout()
@@ -151,135 +45,125 @@ class DumpsActivity : AppCompatActivity(), PaymentResultListener {
                 `object`.put("name", "MSBTE Solution APP")
                 `object`.put(
                     "description",
-                    "MSBTE Solution App is an aplication that provides study materials and resources for students preparing for MSBTE diploma exams"
+                    "MSBTE Solution App is an application that provides study materials and resources for students preparing for MSBTE diploma exams"
                 )
                 `object`.put("theme.color", "")
-                //                    object.put("currency", "INR");
-//                    object.put("receipt", "receipt#1");
                 `object`.put("payment_capture", 1)
                 `object`.put("amount", amount)
                 `object`.put("prefill.contact", "9999999999")
                 `object`.put("prefill.email", "onkardokhe1234@gmail.com")
-                //                    JSONObject notes = new JSONObject();
-//                    notes.put("notes_key_1", "MSBTE Solution App");
-//                    notes.put("notes_key_2", "By PhonixDev");
-//                    object.put("notes", notes);
                 checkout.open(this@DumpsActivity, `object`)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
         })
-        if (isButtonVisible1) {
-            b1.setVisibility(View.VISIBLE)
-        } else {
-            b1.setVisibility(View.GONE)
+
+        restoreButtonVisibility()
+    }
+
+    private fun setupButtons() {
+        val buttons = arrayOf(
+            binding.button1, binding.button2, binding.button3, binding.button4, binding.button5
+        )
+        val urls = arrayOf(
+            "https://drive.google.com/drive/folders/1MNQiaxSRxS22r4Sl8yyGhCD5faE00gyX?usp=sharing",
+            "https://drive.google.com/drive/folders/1Gm4HLCWty7KjypPB14Gm9-76bwhhxo5M?usp=sharing",
+            "https://drive.google.com/drive/folders/1oqcuqxB8ze-1QaYy3ULONnYm2OpY1aX3?usp=sharing",
+            "https://drive.google.com/drive/folders/1vp3IyCQSb3uvOmiw4IAhUwsJlrUtQIQV?usp=sharing",
+            "https://drive.google.com/drive/folders/10iEgyiS8qdGvMst8lidvwybCZNpmDqJg?usp=sharing"
+        )
+
+        for (i in buttons.indices) {
+            buttons[i].setOnClickListener {
+                intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
+                eurl = urls[i]
+                intenttransf.putExtra("url", eurl)
+                startActivity(intenttransf)
+            }
         }
-        if (isButtonVisible2) {
-            b2.setVisibility(View.VISIBLE)
-        } else {
-            b2.setVisibility(View.GONE)
+    }
+
+    private fun setupCheckBoxes() {
+        val checkBoxes = arrayOf(
+            binding.checkBox1,
+            binding.checkBox2,
+            binding.checkBox3,
+            binding.checkBox4,
+            binding.checkBox5
+        )
+        val prices =
+            arrayOf(binding.price1, binding.price2, binding.price3, binding.price4, binding.price5)
+
+        for (i in checkBoxes.indices) {
+            checkBoxes[i].setOnCheckedChangeListener { _, isChecked ->
+                val price = prices[i].text.toString().toInt()
+                famount += if (isChecked) price else -price
+                binding.totaltext.text = "Total : ₹$famount"
+                val buttonId = "b${i + 1}"
+                if (isChecked) {
+                    myIdArr.add(buttonId)
+                } else {
+                    myIdArr.remove(buttonId)
+                }
+            }
         }
-        if (isButtonVisible3) {
-            b3.setVisibility(View.VISIBLE)
-        } else {
-            b3.setVisibility(View.GONE)
+    }
+
+    private fun restoreButtonVisibility() {
+        val buttons = arrayOf(
+            binding.button1, binding.button2, binding.button3, binding.button4, binding.button5
+        )
+        val buttonPrefs = arrayOf("b1", "b2", "b3", "b4", "b5")
+
+        for (i in buttons.indices) {
+            val isVisible = sharedPreferences.getBoolean(buttonPrefs[i], false)
+            buttons[i].visibility = if (isVisible) View.VISIBLE else View.GONE
         }
-        if (isButtonVisible4) {
-            b4.setVisibility(View.VISIBLE)
-        } else {
-            b4.setVisibility(View.GONE)
-        }
-        if (isButtonVisible5) {
-            b5.setVisibility(View.VISIBLE)
-        } else {
-            b5.setVisibility(View.GONE)
-        }
-        b1.setOnClickListener(View.OnClickListener {
-            intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
-            eurl =
-                "https://drive.google.com/drive/folders/1MNQiaxSRxS22r4Sl8yyGhCD5faE00gyX?usp=sharing"
-            intenttransf!!.putExtra("url", eurl)
-            startActivity(intenttransf)
-        })
-        b2.setOnClickListener(View.OnClickListener {
-            intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
-            eurl =
-                "https://drive.google.com/drive/folders/1Gm4HLCWty7KjypPB14Gm9-76bwhhxo5M?usp=sharing"
-            intenttransf!!.putExtra("url", eurl)
-            startActivity(intenttransf)
-        })
-        b3.setOnClickListener(View.OnClickListener {
-            intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
-            eurl =
-                "https://drive.google.com/drive/folders/1oqcuqxB8ze-1QaYy3ULONnYm2OpY1aX3?usp=sharing"
-            intenttransf!!.putExtra("url", eurl)
-            startActivity(intenttransf)
-        })
-        b4.setOnClickListener(View.OnClickListener {
-            intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
-            eurl =
-                "https://drive.google.com/drive/folders/1vp3IyCQSb3uvOmiw4IAhUwsJlrUtQIQV?usp=sharing"
-            intenttransf!!.putExtra("url", eurl)
-            startActivity(intenttransf)
-        })
-        b5.setOnClickListener(View.OnClickListener {
-            intenttransf = Intent(applicationContext, DumpsPDFActivity::class.java)
-            eurl =
-                "https://drive.google.com/drive/folders/10iEgyiS8qdGvMst8lidvwybCZNpmDqJg?usp=sharing"
-            intenttransf!!.putExtra("url", eurl)
-            startActivity(intenttransf)
-        })
     }
 
     override fun onPaymentSuccess(s: String) {
         for (element in myIdArr) {
-            if (element.equals("b1", ignoreCase = true)) {
-                b1!!.visibility = View.VISIBLE
-                val editor = sharedPreferences!!.edit()
-                editor.putBoolean("b1", true)
-                editor.apply()
-            }
-            if (element.equals("b2", ignoreCase = true)) {
-                b2!!.visibility = View.VISIBLE
-                val editor = sharedPreferences!!.edit()
-                editor.putBoolean("b2", true)
-                editor.apply()
-            }
-            if (element.equals("b3", ignoreCase = true)) {
-                b3!!.visibility = View.VISIBLE
-                val editor = sharedPreferences!!.edit()
-                editor.putBoolean("b3", true)
-                editor.apply()
-            }
-            if (element.equals("b4", ignoreCase = true)) {
-                b4!!.visibility = View.VISIBLE
-                val editor = sharedPreferences!!.edit()
-                editor.putBoolean("b4", true)
-                editor.apply()
-            }
-            if (element.equals("b5", ignoreCase = true)) {
-                b5!!.visibility = View.VISIBLE
-                val editor = sharedPreferences!!.edit()
-                editor.putBoolean("b5", true)
-                editor.apply()
+            val button = getButtonById(element)
+            if (button != null) {
+                button.visibility = View.VISIBLE
+                sharedPreferences.edit().putBoolean(element, true).apply()
             }
         }
-        pstatus!!.text = "Payment Successfully. Transaction No :$s"
-        fprice!!.text = "0.00"
-        cb1!!.isChecked = false
-        cb2!!.isChecked = false
-        cb3!!.isChecked = false
-        cb4!!.isChecked = false
-        cb5!!.isChecked = false
+        binding.pstatus.text = "Payment Successfully. Transaction No: $s"
+        binding.totaltext.text = "0.00"
+        for (checkBox in arrayOf(
+            binding.checkBox1,
+            binding.checkBox2,
+            binding.checkBox3,
+            binding.checkBox4,
+            binding.checkBox5
+        )) {
+            checkBox.isChecked = false
+        }
     }
 
     override fun onPaymentError(i: Int, s: String) {
-        pstatus!!.text = "Something went wrong$s"
-        fprice!!.text = "0.00"
-        cb1!!.isChecked = false
-        cb2!!.isChecked = false
-        cb3!!.isChecked = false
-        cb4!!.isChecked = false
-        cb5!!.isChecked = false
+        binding.pstatus.text = "Something went wrong: $s"
+        binding.totaltext.text = "0.00"
+        for (checkBox in arrayOf(
+            binding.checkBox1,
+            binding.checkBox2,
+            binding.checkBox3,
+            binding.checkBox4,
+            binding.checkBox5
+        )) {
+            checkBox.isChecked = false
+        }
+    }
+
+    private fun getButtonById(id: String): View? {
+        return when (id) {
+            "b1" -> binding.button1
+            "b2" -> binding.button2
+            "b3" -> binding.button3
+            "b4" -> binding.button4
+            "b5" -> binding.button5
+            else -> null
+        }
     }
 }
